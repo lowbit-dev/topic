@@ -14,7 +14,7 @@ A single channel, typed pub/sub event primitive for Go. Each `Topic[T]` dispatch
 go get lowbit.dev/topic
 ```
 
-Requires Go 1.23+.
+Requires Go 1.24+.
 
 ## Usage
 
