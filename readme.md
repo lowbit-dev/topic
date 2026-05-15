@@ -1,5 +1,7 @@
 # topic
 
+[![Go Report Card](https://goreportcard.com/badge/lowbit.dev/topic)](https://goreportcard.com/report/lowbit.dev/topic) [![Go Reference](https://pkg.go.dev/badge/lowbit.dev/topic.svg)](https://pkg.go.dev/lowbit.dev/topic) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 A single channel, typed pub/sub event primitive for Go. Each `Topic[T]` dispatches one event type to any number of subscribers — fully typed, no reflection, no global registry. Wire your own collection of topics and you have an event bus the compiler can reason about.
 
 - **Fanout** — all subscribers always run; errors are collected and joined
