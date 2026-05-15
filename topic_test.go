@@ -101,7 +101,7 @@ func TestPublish_EventIsPassedCorrectly(t *testing.T) {
 		return nil
 	})
 
-	tp.Publish(ctx, payload{Value: "hello"}) //nolint:errcheck
+	tp.Publish(ctx, payload{Value: "hello"})
 	if received.Value != "hello" {
 		t.Fatalf("expected 'hello', got %q", received.Value)
 	}
@@ -117,7 +117,7 @@ func TestPublish_ContextPassedToHandler(t *testing.T) {
 	})
 
 	ctx := context.WithValue(context.Background(), key{}, "marker")
-	tp.Publish(ctx, 0) //nolint:errcheck
+	tp.Publish(ctx, 0)
 	if got != "marker" {
 		t.Fatalf("expected context value to propagate, got %v", got)
 	}
@@ -133,9 +133,9 @@ func TestSubscribe_CancelRemovesHandler(t *testing.T) {
 		return nil
 	})
 
-	tp.Publish(ctx, 0) //nolint:errcheck
+	tp.Publish(ctx, 0)
 	cancel()
-	tp.Publish(ctx, 0) //nolint:errcheck
+	tp.Publish(ctx, 0)
 
 	if calls != 1 {
 		t.Fatalf("expected 1 call after cancel, got %d", calls)
@@ -159,7 +159,7 @@ func TestSubscribe_CancelOnlyRemovesOwnHandler(t *testing.T) {
 	tp.Subscribe(func(_ context.Context, _ int) error { bRan = true; return nil })
 
 	cancelA()
-	tp.Publish(ctx, 0) //nolint:errcheck
+	tp.Publish(ctx, 0)
 
 	if aRan {
 		t.Error("handler A should not run after cancel")
@@ -176,7 +176,7 @@ func TestSubscribe_DispatchOrderIsSubscriptionOrder(t *testing.T) {
 	tp.Subscribe(func(_ context.Context, _ int) error { order = append(order, 2); return nil })
 	tp.Subscribe(func(_ context.Context, _ int) error { order = append(order, 3); return nil })
 
-	tp.Publish(ctx, 0) //nolint:errcheck
+	tp.Publish(ctx, 0)
 
 	for i, v := range order {
 		if v != i+1 {
@@ -196,7 +196,7 @@ func TestPublish_ConcurrentPublishersDoNotRace(t *testing.T) {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			tp.Publish(ctx, 1) //nolint:errcheck
+			tp.Publish(ctx, 1)
 		}()
 	}
 	wg.Wait()
@@ -211,7 +211,7 @@ func TestSubscribe_ConcurrentSubscribePublishDoNotRace(t *testing.T) {
 		go func() {
 			defer wg.Done()
 			cancel := tp.Subscribe(func(_ context.Context, _ int) error { return nil })
-			tp.Publish(ctx, 0) //nolint:errcheck
+			tp.Publish(ctx, 0)
 			cancel()
 		}()
 	}
@@ -233,7 +233,7 @@ func TestSubscribe_SnapshotIsolation(t *testing.T) {
 		return nil
 	})
 
-	tp.Publish(ctx, 0) //nolint:errcheck
+	tp.Publish(ctx, 0)
 
 	if secondCalls != 0 {
 		t.Fatalf("handler subscribed during dispatch should not run for current event, got %d calls", secondCalls)
@@ -357,7 +357,7 @@ func TestWithRecovery_OtherHandlersRunAfterPanic(t *testing.T) {
 		return nil
 	})
 
-	tp.Publish(ctx, 0) //nolint:errcheck
+	tp.Publish(ctx, 0)
 
 	if !afterRan {
 		t.Fatal("handler after panicking handler should still run")
